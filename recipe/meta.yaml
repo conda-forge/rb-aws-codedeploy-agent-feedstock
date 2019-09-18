@@ -1,5 +1,5 @@
 {% set name = "aws-codedeploy-agent" %}
-{% set version = "1518" %}
+{% set version = "1597" %}
 
 package:
   name: rb-{{ name|lower }}
@@ -12,11 +12,11 @@ source:
   url: https://github.com/aws/aws-codedeploy-agent/archive/v1.0-1.{{ version }}.tar.gz
   {% endif %}
 
-  sha256: 3161e59054629b2ad5bc1897467f0b689287cedca1b87fda013d3d240a52746c
+  sha256: 550cdf8eca9053efcb35065b066e17c5d801c54271e2d643b0a697c6f72b8f07
 
 build:
   noarch: generic
-  number: 0
+  number: 1
   skip: {{ win }}
   no_link:
     - etc/*
