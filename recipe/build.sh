@@ -1,18 +1,22 @@
 #!/usr/bin/env bash
 set -euf
 
-grep -lRE '/(etc|opt)/codedeploy-agent' . \
+CONF_DIR=${PREFIX}/etc/codedeploy-agent
+
+grep --exclude conda_build.sh -lRE '/(etc|opt)/codedeploy-agent' . \
   | xargs -I {} sed -i \
                     -e "s|/opt/codedeploy-agent|${PREFIX}|" \
-                    -e "s|/etc/codedeploy-agent|${PREFIX}/etc|" {} \
+                    -e "s|/etc/codedeploy-agent/conf|${CONF_DIR}|" \
+                    {}
 
 sed -i \
     -e "s|/var/log/aws/codedeploy-agent|${PREFIX}/log/codedeploy-agent|" \
     -e "s|/state/.pid|/run|" \
     conf/codedeployagent.yml
 
-mkdir -p ${PREFIX}/etc
-cp conf/codedeployagent.yml ${PREFIX}/etc
+mkdir -p ${CONF_DIR}
+cp conf/codedeployagent.yml ${CONF_DIR}
+
 mkdir -p ${PREFIX}/log/codedeploy-agent
 touch ${PREFIX}/log/codedeploy-agent/.mkdir
 
@@ -26,4 +30,3 @@ sed -i \
 
 gem build codedeploy_agent-1.1.0.gemspec
 gem install -N -l -V --norc --ignore-dependencies ${PKG_NAME}-${PKG_VERSION}.gem
-
